@@ -18,7 +18,7 @@ services:
 
   db:
     image: mysql:5.7
-    container_name: laravel-app-db
+    container_name: ${APP_NAME}-db
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
@@ -34,7 +34,7 @@ services:
 
   nginx:
     image: nginx:alpine
-    container_name: laravel-app-nginx
+    container_name: ${APP_NAME}-nginx
     restart: unless-stopped
     ports:
       - "8000:80"
