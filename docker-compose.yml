@@ -52,6 +52,24 @@ services:
     networks:
       - app-net
 
+  phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: ${APP_NAME}-phpmyadmin
+      ports:
+        - "7000:80"
+      links:
+        - db:db
+      environment:
+        MYSQL_USER: ${DB_USERNAME}
+        MYSQL_PASSWORD: ${DB_PASSWORD}
+        MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+        PMA_USER: ${DB_USERNAME} # comment this line to disable auto-login
+        PMA_PASSWORD: ${DB_PASSWORD} # comment this line to disable auto-login
+      depends_on:
+        - db
+      networks:
+        - app-net
+
 networks:
   app-net:
     driver: bridge
