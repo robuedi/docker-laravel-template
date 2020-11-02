@@ -11,7 +11,9 @@ services:
     container_name: ${APP_NAME}
     restart: unless-stopped
     working_dir: /var/www/
+    command: bash -c 'sleep 5 && php artisan migrate'
     volumes:
+      - ./docker/app/init.sh:/var/www/docker/app/init.sh
       - ./:/var/www
     depends_on:
       - db
@@ -32,8 +34,8 @@ services:
     ports:
       - "${DB_PORT}:3306"
     volumes:
-      - ./docker-compose/mysql/data:/var/lib/mysql/ #this will make the storage persistent
-      - ./docker-compose/mysql/init:/docker-entrypoint-initdb.d/ #this will first populate the database
+      - ./docker/mysql/data:/var/lib/mysql/ #this will make the storage persistent
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d/ #this will first populate the database
     networks:
       - app-net
 
@@ -45,7 +47,7 @@ services:
       - "8000:80"
     volumes:
       - ./:/var/www
-      - ./docker-compose/nginx:/etc/nginx/conf.d
+      - ./docker/nginx:/etc/nginx/conf.d
     depends_on:
       - app
       - db
