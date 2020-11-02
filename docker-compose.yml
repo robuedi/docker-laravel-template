@@ -14,7 +14,7 @@ services:
     volumes:
       - ./:/var/www
     networks:
-      - ${APP_NAME}-net
+      - app-net
 
   db:
     image: mysql:5.7
@@ -27,10 +27,13 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
+    ports:
+      - "${DB_PORT}:3306"
     volumes:
-      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+      - ./docker-compose/mysql/data:/var/lib/mysql/
+      - ./docker-compose/mysql/init:/docker-entrypoint-initdb.d/
     networks:
-      - ${APP_NAME}-net
+      - app-net
 
   nginx:
     image: nginx:stable-alpine
@@ -40,10 +43,13 @@ services:
       - "8000:80"
     volumes:
       - ./:/var/www
-      - ./docker-compose/nginx:/etc/nginx/conf.d/default.conf
+      - ./docker-compose/nginx:/etc/nginx/conf.d
+    depends_on:
+      - app
+      - db
     networks:
-      - ${APP_NAME}-net
+      - app-net
 
 networks:
-  ${APP_NAME}-net:
+  app-net:
     driver: bridge
