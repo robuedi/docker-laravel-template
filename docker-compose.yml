@@ -32,8 +32,8 @@ services:
     ports:
       - "${DB_PORT}:3306"
     volumes:
-      - ./docker-compose/mysql/data:/var/lib/mysql/
-      - ./docker-compose/mysql/init:/docker-entrypoint-initdb.d/
+      - ./docker-compose/mysql/data:/var/lib/mysql/ #this will make the storage persistent
+      - ./docker-compose/mysql/init:/docker-entrypoint-initdb.d/ #this will first populate the database
     networks:
       - app-net
 
