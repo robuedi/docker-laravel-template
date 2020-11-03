@@ -14,6 +14,7 @@ services:
       - ./:/var/www
     depends_on:
       - db
+      - init-scripts
     networks:
       - app-net
 
@@ -59,7 +60,6 @@ services:
     volumes:
       - ./:/var/www
     depends_on:
-      - app
       - db
     networks:
       - app-net
