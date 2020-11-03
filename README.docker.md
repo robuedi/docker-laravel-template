@@ -1,15 +1,17 @@
 # Docker-Laravel template
 
 #### Setting up
-To set up docker make a new laravel project and add this files/folder to the project.
 
+Run the ```migrate-template``` script using this format:
+
+```./migrate-template.sh ../../path/to/laravel-project```
+
+#### Environments
 Set the ```DB_HOST``` from ```.env``` to the ```docker-compose.yml``` service name (currently ```db```)
 
 Comment the ```PMA_USER``` and ```PMA_PASSWORD``` lines from the ```phpmyadmin``` service if you want to disable auto-login when opening the ```phpmyadmin``` in browser.
 
-#### Info:
-
-##### Services running order
+#### Services running order
 
 1. db: first we create the MySQL database service
 2. init-scripts: next we create the service that will run the initial scripts. This service will exit once we run the initial scripts, that's it's sole purpose.
