@@ -9,7 +9,7 @@ Run the ```migrate-template``` script in terminal using this format:
 ```./migrate-template.sh ../../path/to/laravel-project```
 
 ##### 2. Start the services
-Run the commands inside the root folder of your project
+Run the commands inside the root folder of your Laravel project
 
 ```
 docker-compose build
