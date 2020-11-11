@@ -1,12 +1,34 @@
 # Docker-Laravel template
 
-#### Setting up
 
-Run the ```migrate-template``` script using this format:
+## Setting up
+
+##### 1. Migrate template files
+Run the ```migrate-template``` script in terminal using this format:
 
 ```./migrate-template.sh ../../path/to/laravel-project```
 
-#### Environments
+##### 2. Start the services
+Run the commands
+
+```
+docker-compose build
+docker-compose up -d
+```
+
+##### 3. Wait (important)
+A temporary ```initial-script-progress.txt``` file will be created, wait until it's automatically deleted before using the services. 
+
+First time when booting up the services it will take longer.
+
+## Client side usage
+Go in browser to [localhost:8000](http://localhost:8000) the view the app (currently the nginx service uses the 8000 port).
+
+Go in browser to [localhost:7000](http://localhost:7000) to check the database in phpmyadmin (currently the phpmyadmin service uses the 7000 port).
+
+
+## Extra (optional, but good to know)
+#### Environments info
 Set the ```DB_HOST``` from ```.env``` to the ```docker-compose.yml``` service name (currently ```db```)
 
 Comment the ```PMA_USER``` and ```PMA_PASSWORD``` lines from the ```phpmyadmin``` service if you want to disable auto-login when opening the ```phpmyadmin``` in browser.
@@ -20,17 +42,4 @@ Comment the ```PMA_USER``` and ```PMA_PASSWORD``` lines from the ```phpmyadmin``
 4. nginx: the server that is hosting our application is created
 
 
-#### Starting the app
-Run the commands
-
-```
-docker-compose build
-docker-compose up -d
-```
-
-#### Navigating to the services (app/db)
-Go in browser to [localhost:8000](http://localhost:8000) the view the app (currently the nginx service uses the 8000 port).
-
-Go in browser to [localhost:7000](http://localhost:7000) to check the database in phpmyadmin (currently the phpmyadmin service uses the 7000 port).
-
-Enjoy.
+## Enjoy!
