@@ -42,4 +42,4 @@ Comment the ```PMA_USER``` and ```PMA_PASSWORD``` lines from the ```phpmyadmin``
 4. nginx: the server that is hosting our application is created
 
 
-## Enjoy!
+## Enjoy by Eduard Robu!
