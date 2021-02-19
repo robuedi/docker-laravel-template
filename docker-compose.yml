@@ -32,7 +32,7 @@ services:
         uid: 1000
       context: ./
       dockerfile: Dockerfile
-    image: eduard-docker-laravel-img
+    image: php-app
     container_name: ${APP_NAME}-init-scripts
     working_dir: /var/www/
     command: bash -c 'chmod +x docker/init.sh && docker/init.sh' # migrations will run at startup
@@ -45,7 +45,7 @@ services:
       - app-net
 
   app:
-    image: eduard-docker-laravel-img
+    image: php-app
     container_name: ${APP_NAME}-app
     working_dir: /var/www/
     volumes:
