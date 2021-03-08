@@ -13,15 +13,26 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     healthcheck:
-        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-        interval: 1s
-        timeout: 20s
-        retries: 10
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 2s
+      timeout: 20s
+      retries: 10
     ports:
       - "${DB_PORT}:3306"
     volumes:
       - ./docker/mysql/data:/var/lib/mysql/ #this will make the storage persistent
       - ./docker/mysql/init:/docker-entrypoint-initdb.d/ #this will first populate the database
+    networks:
+      - app-net
+
+  redis:
+    image: redis:alpine
+    container_name: ${APP_NAME}-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - ./data/redis:/redis/data
+    ports:
+      - "8002:6379"
     networks:
       - app-net
 
@@ -45,14 +56,17 @@ services:
       - app-net
 
   app:
+    build:
+      args:
+        user: eduard
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
     image: php-app
     container_name: ${APP_NAME}-app
     working_dir: /var/www/
     volumes:
       - ./:/var/www
-    depends_on:
-      - db
-      - init-scripts
     networks:
       - app-net
 
@@ -61,7 +75,7 @@ services:
     container_name: ${APP_NAME}-nginx
     restart: unless-stopped
     ports:
-      - "8001:80"
+      - "80:80"
     volumes:
       - ./:/var/www
       - ./docker/nginx:/etc/nginx/conf.d
@@ -72,23 +86,20 @@ services:
       - app-net
 
   phpmyadmin:
-      image: phpmyadmin/phpmyadmin
-      container_name: ${APP_NAME}-phpmyadmin
-      ports:
-        - "7001:80"
-      links:
-        - db:db
-      environment:
-        MYSQL_USER: ${DB_USERNAME}
-        MYSQL_PASSWORD: ${DB_PASSWORD}
-        MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-        PMA_USER: ${DB_USERNAME} # comment this line to disable auto-login
-        PMA_PASSWORD: ${DB_PASSWORD} # comment this line to disable auto-login
-      depends_on:
-        - db
-        - init-scripts
-      networks:
-        - app-net
+    image: phpmyadmin/phpmyadmin
+    container_name: ${APP_NAME}-phpmyadmin
+    ports:
+      - "7001:80"
+    links:
+      - db:db
+    environment:
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      PMA_USER: ${DB_USERNAME} # comment this line to disable auto-login
+      PMA_PASSWORD: ${DB_PASSWORD} # comment this line to disable auto-login
+    networks:
+      - app-net
 
 networks:
   app-net:

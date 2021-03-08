@@ -9,6 +9,8 @@ cd $1
 sudo chmod -R 777 storage/
 sudo chmod -R 777 bootstrap/cache
 
+echo 'initial-script-progress.txt' >> .gitignore
+
 # remote migrate file
 rm migrate-template.sh
 

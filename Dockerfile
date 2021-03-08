@@ -18,11 +18,20 @@ RUN apt-get update && apt-get install -y \
     nodejs \
     npm
 
+RUN apt-get install -y libpng-dev libfreetype6-dev libjpeg62-turbo-dev && \
+    docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
+    docker-php-ext-install -j$(nproc) gd
+
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd mysqli
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath mysqli
+
+# Install redis extension
+RUN pecl install -o -f redis \
+&&  rm -rf /tmp/pear \
+&&  docker-php-ext-enable redis
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
